@@ -10,6 +10,7 @@ const upload = multer();
 var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['localhost'], localDataCenter:'datacenter1', keyspace: 'hw5'});
 
+var upload = multer({ dest: 'uploads/' })
 
 //check connection to cassandra
 client.connect(function(err, result) {

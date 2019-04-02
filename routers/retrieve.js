@@ -2,10 +2,8 @@ var express = require('express');
 const app = express();
 var router = express.Router();
 
-
 var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['localhost'], localDataCenter:'datacenter1', keyspace: 'hw5'});
-
 
 //check connection to cassandra
 client.connect(function established(err) {
@@ -16,7 +14,7 @@ client.connect(function established(err) {
 });
 
 //fliter
-router.get('/', jsonParser, function(req, res) {
+router.get('/', function(req, res) {
         var fname = req.body.filename;
         client.execute("SELECT contents FROM hw5 WHERE key =?", filename, function(err, result) {
                 if(err)
