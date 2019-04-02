@@ -5,7 +5,7 @@ var router = express.Router();
 var formidable = require('formidable');
 var http = require('http');
 const multer = require('multer');
-const upload = multer();
+//const upload = multer();
 
 var cassandra = require('cassandra-driver');
 var client = new cassandra.Client({contactPoints: ['localhost'], localDataCenter:'datacenter1', keyspace: 'hw5'});
@@ -20,6 +20,10 @@ client.connect(function(err, result) {
                 console.log('Connection with Cassandra established');
 });
 
+router.get('/',function (req, res, next) {
+        res.send("OK");
+});
+
 router.post('/',upload.single('contents'),function(req, res){
         data = req.body;
         var fname = data.filename;
@@ -32,6 +36,8 @@ router.post('/',upload.single('contents'),function(req, res){
         });
 
 });
+
+router.get 
 
 module.exports = router;
 
