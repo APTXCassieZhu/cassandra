@@ -18,12 +18,13 @@ client.connect(function established(err) {
 //fliter
 router.get('/', jsonParser, function(req, res) {
         var fname = req.body.filename;
-        client.execute("SELECT filename, contents FROM hw5 WHERE key =?", filename, function(err, result) {
+        client.execute("SELECT contents FROM hw5 WHERE key =?", filename, function(err, result) {
                 if(err)
                         res.send(err);
                 else{
-                        var contents = result[0];
+                        console.log(result[0]);
                         res.writeHead(200, {'Content-Type': 'image/...'});
+                        res.send(result[0].contents);
                 }
         });
 });

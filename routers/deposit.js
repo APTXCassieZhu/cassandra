@@ -2,17 +2,16 @@ var express = require('express');
 const app = express();
 var router = express.Router();
 
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var formidable = require('formidable');
+var http = require('http');
+const multer = require('multer');
+const upload = multer();
 
 var cassandra = require('cassandra-driver');
-var cql = require('node-cassandra-cql');
-//var client = new cql.Client({hosts: ['130.245.170.97:3000'], keyspace: 'hw5'});
-var client = new cassandra.Client({contactPoints: ['130.245.170.97']});
+var client = new cassandra.Client({contactPoints: ['localhost'], localDataCenter:'datacenter1', keyspace: 'hw5'});
 
 
-//check connection to cql
+//check connection to cassandra
 client.connect(function(err, result) {
         if(err)
                 console.log(err);
@@ -20,9 +19,16 @@ client.connect(function(err, result) {
                 console.log('Connection with Cassandra established');
 });
 
-router.post('/',jsonParser,function(req, res){
+router.post('/',upload.single('contents'),function(req, res){
         data = req.body;
-        var query = 'INSERT INTO imgs';
+        var fname = data.filename;
+        var query = 'INSERT INTO imgs (filename, contents) VALUES (?, ?)';
+        client.execute(query, [fname, req.file.buffer], function(err, result){
+                if(err)
+                        res.send(err);
+                else    
+                        res.send("OK");
+        });
 
 });
 
