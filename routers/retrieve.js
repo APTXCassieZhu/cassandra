@@ -16,13 +16,15 @@ client.connect(function established(err) {
 //fliter
 router.get('/', function(req, res) {
         var fname = req.body.filename;
-        client.execute("SELECT contents FROM hw5 WHERE key =?", filename, function(err, result) {
+        client.execute("SELECT contents FROM hw5 WHERE filename =?", filename, function(err, result) {
                 if(err)
                         res.send(err);
                 else{
-                        console.log(result[0]);
-                        res.writeHead(200, {'Content-Type': 'image/...'});
-                        res.send(result[0].contents);
+                        var type = req.query.filename.split('.')[1];
+                        //res.writeHead(200, {'Content-Type': ct})
+                        var ct = 'image/'+type;
+                        res.type(ct);
+                        res.send(result.first().contents);
                 }
         });
 });

@@ -5,6 +5,8 @@ var router = express.Router();
 var formidable = require('formidable');
 var http = require('http');
 const multer = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({ dest: 'uploads/', storage: storage  })
 //const upload = multer();
 
 var cassandra = require('cassandra-driver');
